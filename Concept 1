@@ -49,16 +49,15 @@ def delete_row ():
 def setup_buttons():
     bg_colour1 = "hot pink"
     Button(main_window, text="Quit",command=quit, bg=bg_colour1) .grid(column=1, row=0)
-
-
     Button(main_window, text="Append Details",command=append_name, bg=bg_colour1) .grid(column=0,row=1)
-    
     Button(main_window, text="Print Details",command=print_store_details, bg=bg_colour1) .grid(column=1,row=1)
+    
     Label(main_window, text="Full Name") .grid(column=0,row=2)
     Label(main_window, text="Receipt Number") .grid(column=0,row=3)
     Label(main_window, text="The Item that is hired") .grid(column=0,row=4)
     Label(main_window, text="How many of the item") .grid(column=0,row=5)
     Label(main_window, text="Row #") .grid(column=0,row=6)
+    
     Button(main_window, text="Delete",command=delete_row, bg=bg_colour1) .grid(column=2,row=6)
     
 
