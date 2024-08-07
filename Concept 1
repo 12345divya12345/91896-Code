@@ -67,8 +67,7 @@ def validate_alpha_input(char):
 def validate_digit_input(char):
     return char.isdigit()
 
-#Check the inputs are all valid
-def check_inputs():
+def check_entry_name():
     text = entry_name.get()
     if entry_name.get() == "":
         messagebox.showwarning("Warning", "'Full Name' is empty")
@@ -97,6 +96,7 @@ def check_inputs():
         # Clear the entry box
         entry_name.delete(0, tk.END)
 
+def check_entry_hired_item():
     text=entry_hired_item.get()
     if entry_hired_item.get() == "":
         messagebox.showwarning("Warning", "'The Item that is hired' is empty")
@@ -116,6 +116,33 @@ def check_inputs():
         messagebox.showwarning("Warning", "'The Item that is hired' can't be a special character!")
         # Clear the entry box
         entry_hired_item.delete(0, tk.END)
+
+def check_item_amount():
+    text=entry_item_amount.get()
+    if entry_item_amount.get() == "":
+        messagebox.showwarning("Warning", "'How many of the item' is empty")
+        entry_item_amount.delete(0, tk.END)
+        
+    elif entry_item_amount.get().isdigit():
+        display_label = Label(main_window, text=text)
+        with open("entries.txt", "a") as file:
+            file.write(text)
+        entry_item_amount.delete(0, tk.END)
+        
+    elif entry_item_amount.get().isalpha():
+        messagebox.showwarning("Warning", "'How many of the item' cannot be an alphabetical number")
+        entry_item_amount.delete(0, tk.END)
+        
+    else:
+        messagebox.showwarning("Warning", "'How many of the item' can't be a special character!")
+        # Clear the entry box
+        entry_item_amount.delete(0, tk.END)
+
+#Check the inputs are all valid
+def check_inputs():
+    check_entry_name()
+    check_entry_hired_item()
+    check_item_amount()
 
 #create the buttons and labels
 def setup_buttons():
@@ -169,5 +196,4 @@ delete_item = Entry(main_window)
 delete_item.grid(column=3,row=3)    
 
 main()
-
 
