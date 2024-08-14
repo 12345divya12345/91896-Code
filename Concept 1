@@ -1,9 +1,12 @@
 #import tkinter so we can make a GUI
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox #importing messagebox for error messages
 from tkinter import *
-import random
-import os
+from tkinter import ttk #importing ttk for combobox function
+import random #importing random for generating a random receipt number
+
+
+#spinbox?
 
 #creating a function that can be used to exit to program
 def exit_program():
@@ -154,11 +157,9 @@ def setup_buttons():
     Label(main_window, font=font1, text="How many of the item") .grid(column=0,row=2,sticky=E)
     Label(main_window, font=font1, text="Row #") .grid(column=3,row=2,sticky=E)
     Label(main_window, font=font1, text="               ") .grid(column=2,row=0)
-
     Button(main_window, font=font1, text="Quit",command=exit_program,width = 10) .grid(column=4, row=0,sticky=E)
     Button(main_window, font=font1, text="Display Details",command=print_store_details, width = 10) .grid(column=4,row=1,sticky=E)
     Button(main_window, font=font1, text="Delete Row",command=delete_row, width = 10) .grid(column=4,row=3,sticky=E)
-    
     Button(main_window, font=font1, command=append_name,text="Check and Save Details").grid(column=3,row=1)
 
 #start the program running
@@ -174,18 +175,21 @@ main_window = Tk()
 
 font1=("Helvetica 10 normal")
 
-#Setting up the validation command
-#Configuring the entry widget to use the validation function
+#setting up the validation command
+#configuring the entry widget to use the validation function
 validate_alpha = main_window.register(validate_alpha_input)
 validate_digit = main_window.register(validate_digit_input)
 
 entry_name = Entry(main_window,validate="key", validatecommand=(validate_alpha,'%S'))
 entry_name.grid(column=1,row=0)
 
-entry_hired_item = Entry(main_window,validate="key", validatecommand=(validate_digit,'%S'))
+#deciding on items for the combobox
+items_hired=['Chairs','Tables','Tablecloth','Table Centerpieces','String Lights','Balloons','Flowers','Speakers','Paper Plates','Paper Bowls','Glassware','Beverage Dispensers']
+
+entry_hired_item = ttk.Combobox(main_window, values=items_hired)
 entry_hired_item.grid(column=1,row=1)
 
-entry_item_amount = Entry(main_window,validate="key", validatecommand=(validate_alpha,'%S'))
+entry_item_amount = Entry(main_window,validate="key", validatecommand=(validate_digit,'%S'))
 entry_item_amount.grid(column=1, row=2)
 
 delete_item = Entry(main_window)
