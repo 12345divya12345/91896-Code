@@ -5,9 +5,6 @@ from tkinter import *
 from tkinter import ttk #importing ttk for combobox function
 import random #importing random for generating a random receipt number
 
-
-#spinbox?
-
 #creating a function that can be used to exit to program
 def exit_program():
     main_window.destroy()
@@ -172,6 +169,8 @@ def main():
 counters = {'total_entries':0,'name_count':0}
 store_details = []    
 main_window = Tk()
+#personalising the window name
+main_window.title("Julie's Party Hire Store")
 
 font1=("Helvetica 10 normal")
 
