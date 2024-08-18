@@ -14,19 +14,19 @@ def exit_program():
 def print_store_details():
     name_count = 0
     #Create the column headings
-    Label(main_window, font=font1, text="Row").grid(column=0,row=7)
-    Label(main_window, font=font1, text="Full Name").grid(column=1,row=7)
-    Label(main_window, font=font1, text="The Item that is hired").grid(column=2,row=7)
-    Label(main_window, font=font1, text="How many of the item").grid(column=3,row=7)
-    Label(main_window, font=font1, text="Receipt No.").grid(column=4, row=7)
+    Label(main_window, font=font1, text="Row", bg=bg_colour1).grid(column=0,row=7)
+    Label(main_window, font=font1, text="Full Name", bg=bg_colour1).grid(column=1,row=7)
+    Label(main_window, font=font1, text="The Item that is hired", bg=bg_colour1).grid(column=2,row=7)
+    Label(main_window, font=font1, text="How many of the item", bg=bg_colour1).grid(column=3,row=7)
+    Label(main_window, font=font1, text="Receipt No.", bg=bg_colour1).grid(column=4, row=7)
 
     #add each item in the list into its own row
     while name_count < counters['total_entries'] :
-        Label(main_window, font=font1, text=name_count).grid(column=0,row=name_count+8) 
-        Label(main_window, font=font1, text=(store_details[name_count][0])).grid(column=1,row=name_count+8)
-        Label(main_window, font=font1, text=(store_details[name_count][1])).grid(column=2,row=name_count+8)
-        Label(main_window, font=font1, text=(store_details[name_count][2])).grid(column=3,row=name_count+8)
-        Label(main_window, font=font1, text=(store_details[name_count][3])).grid(column=4,row=name_count+8)
+        Label(main_window, font=font1, text=name_count, bg=bg_colour1).grid(column=0,row=name_count+8) 
+        Label(main_window, font=font1, text=(store_details[name_count][0]), bg=bg_colour1).grid(column=1,row=name_count+8)
+        Label(main_window, font=font1, text=(store_details[name_count][1]), bg=bg_colour1).grid(column=2,row=name_count+8)
+        Label(main_window, font=font1, text=(store_details[name_count][2]), bg=bg_colour1).grid(column=3,row=name_count+8)
+        Label(main_window, font=font1, text=(store_details[name_count][3]), bg=bg_colour1).grid(column=4,row=name_count+8)
         name_count +=1
         counters['name_count'] = name_count
 
@@ -59,26 +59,19 @@ def append_name():
 def delete_row():
     try:
         row_to_delete=int(delete_item.get())
-
         if row_to_delete<0 or row_to_delete>= len(store_details):
             messagebox.showwarning("Warning", "Invalid Row Number!")
             delete_item.delete(0,'end')
             return
         del store_details[row_to_delete]
-
         counters['total_entries'] -=1
-                 
-
         for widget in main_window.grid_slaves():
             if widget.grid_info()["row"]>7:
                  widget.grid_forget()
-
         print_store_details()
         delete_item.delete(0,'end')
-
     except ValueError:
         messagebox.showwarning("Warning", "Invalid Row Number! (No alphabetical letters or special characters)")
-    
 
 def validate_alpha_input(char):
     return char.isalpha()
@@ -156,15 +149,16 @@ def check_inputs():
 #create the buttons and labels
 def setup_buttons():
     #create all the empty and default labels, buttons and entry boxes. Put them in the correct grid location
-    Label(main_window, font=font1, text="Full Name") .grid(column=0,row=0,sticky=E)
-    Label(main_window, font=font1, text="The Item that is hired") .grid(column=0,row=1,sticky=E)
-    Label(main_window, font=font1, text="How many of the item") .grid(column=0,row=2,sticky=E)
-    Label(main_window, font=font1, text="Row #") .grid(column=3,row=2,sticky=E)
-    Label(main_window, font=font1, text="               ") .grid(column=2,row=0)
-    Button(main_window, font=font1, text="Quit",command=exit_program,width = 10) .grid(column=4, row=0,sticky=E)
-    Button(main_window, font=font1, text="Display Details",command=print_store_details, width = 10) .grid(column=4,row=1,sticky=E)
-    Button(main_window, font=font1, text="Delete Row",command=delete_row, width = 10) .grid(column=4,row=3,sticky=E)
-    Button(main_window, font=font1, command=append_name,text="Check and Save Details").grid(column=3,row=1)
+    Label(main_window, font=font1, text="Full Name", bg=bg_colour1) .grid(column=0,row=0,sticky=E)
+    Label(main_window, font=font1, text="The Item that is hired", bg=bg_colour1) .grid(column=0,row=1,sticky=E)
+    Label(main_window, font=font1, text="How many of the item", bg=bg_colour1) .grid(column=0,row=2,sticky=E)
+    Label(main_window, font=font1, text="Row #", bg=bg_colour1) .grid(column=3,row=2,sticky=E)
+    Label(main_window, font=font1, text="               ", bg=bg_colour1) .grid(column=2,row=0)
+
+    Button(main_window, font=font1, text="Quit",command=exit_program,width = 12, bg=bg_colour2) .grid(column=4, row=0,sticky=E)
+    Button(main_window, font=font1, text="Display Details",command=print_store_details, width = 12, bg=bg_colour2) .grid(column=4,row=1,sticky=E)
+    Button(main_window, font=font1, text="Delete Row",command=delete_row, width = 12, bg=bg_colour2) .grid(column=4,row=3,sticky=E)
+    Button(main_window, font=font1, command=append_name,text="Check and Save Details", bg=bg_colour2).grid(column=3,row=1)
 
 #start the program running
 def main():
@@ -173,22 +167,30 @@ def main():
     #Start the GUI up
     setup_buttons()
     main_window.mainloop()
-    
+
+#choosing a background colour
+bg_colour1 = "lightblue"
+bg_colour2 = "khaki"
+#choosing a font
+font1=("Verdana 10 normal")
+
 #create empty list for store details and empty variable for entries in the list
 counters = {'total_entries':0,'name_count':0}
 store_details = []    
 main_window = Tk()
+#changing background colour
+main_window.configure(bg=bg_colour1)
 #personalising the window name
-main_window.title("Julie's Party Hire Store")
+main_window.title("Julie's Party Hire Store")   
 
-font1=("Helvetica 10 normal")
+
 
 #setting up the validation command
 #configuring the entry widget to use the validation function
 validate_alpha = main_window.register(validate_alpha_input)
 validate_digit = main_window.register(validate_digit_input)
 
-entry_name = Entry(main_window,validate="key", validatecommand=(validate_alpha,'%S'))
+entry_name = Entry(main_window,validate="key", validatecommand=(validate_alpha,'%S'), bg=bg_colour2)
 entry_name.grid(column=1,row=0)
 
 #deciding on items for the combobox
@@ -197,11 +199,10 @@ items_hired=['Chairs','Tables','Tablecloth','Table Centerpieces','String Lights'
 entry_hired_item = ttk.Combobox(main_window, values=items_hired)
 entry_hired_item.grid(column=1,row=1)
 
-entry_item_amount = Entry(main_window,validate="key", validatecommand=(validate_digit,'%S'))
+entry_item_amount = Entry(main_window,validate="key", validatecommand=(validate_digit,'%S'), bg=bg_colour2)
 entry_item_amount.grid(column=1, row=2)
 
-delete_item = Entry(main_window)
+delete_item = Entry(main_window, bg=bg_colour2)
 delete_item.grid(column=3,row=3)    
 
 main()
-
