@@ -160,6 +160,12 @@ def setup_buttons():
     Button(main_window, font=font1, text="Delete Row",command=delete_row, width = 12, bg=bg_colour2) .grid(column=4,row=3,sticky=E)
     Button(main_window, font=font1, command=append_name,text="Check and Save Details", bg=bg_colour2).grid(column=3,row=1)
 
+    #loading the png image
+    image=tk.PhotoImage(file="Julie's party hire logo.png")
+    #creating a label and setting the image as the content
+    image_label = tk.Label(main_window, image=image).grid(column=1, row=0, sticky="nsew")
+    image_label.image=image #keeping a reference (without this, image won't display
+
 #start the program running
 def main():
     #personalising the icon of the main window
