@@ -1,4 +1,4 @@
-mport tkinter so we can make a GUI
+# Import tkinter so we can make a GUI
 import tkinter as tk
 from tkinter import messagebox # Importing messagebox for error messages
 from tkinter import *
@@ -6,131 +6,16 @@ from tkinter import ttk # Importing ttk for combobox function
 import random # Importing random for generating a random receipt number
 import os # For saving to a data file
 
-# Creating a function that can be used to exit to program
-def exit_program():
-    main_window.destroy()
-
-def save_entry_to_file(entry):   
-    with open("entries.txt","a") as file: # 'a' opens the file for appending
-        file.write(",".join(map(str,entry))+"\n")
-
-# Add the next customer to the list
-def append_name():
-    # Check_inputs()
-    if len(entry_name.get()) == 0 :
-        # Append each item to its own area of the list
-        check_inputs()
-    else:
-        # Generating a random receipt number
-        receipt_number=random.randint(100,999)
-        # Creating the entry as a list of values
-        entry=([entry_name.get(),entry_hired_item.get(),entry_item_amount.get(),receipt_number])
-        # Append the entry to the storedetails 
-        store_details.append(entry)
-        # Save the entry to the file
-        save_entry_to_file(entry)
-        # Clear the boxes
-        entry_name.delete(0,'end')
-        entry_hired_item.delete(0,'end')
-        entry_item_amount.delete(0,'end')
-        counters['total_entries'] += 1
-
-def validate_alpha_input(char):
-    return char.isalpha()
-
-def validate_digit_input(char):
-    return char.isdigit()
-
-def check_entry_name():
-    name = entry_name.get()
-    if entry_name.get() == "":
-        messagebox.showwarning("Warning", "'Name' is empty")
-        entry_name.delete(0, tk.END)
-        
-    elif entry_name.get().isalpha():
-        name_length=len(name)
-        if name_length > 12:
-            # Creating a new toplevel window/popup
-            name_too_long=tk.Toplevel(main_window)
-            name_too_long.title("Warning")
-            name_too_long.geometry("275x125")
-            name_too_long.iconbitmap('pinkhat.ico')
-            name_too_long.configure(bg=bg_colour1)
-
-            tk.Label(name_too_long, text="'Name' cannot be longer than 12 characters", bg=bg_colour1)
-            entry_name.delete(0, tk.END)
-        else:
-            # Display the entry below the button
-            display_label.config(text=name)
-            # Clear the entry box
-            entry_name.delete(0, tk.END)
-
-    elif entry_name.get().isdigit():
-        messagebox.showwarning("Warning", "'Name' cannot be a number!")
-        entry_name.delete(0, tk.END)
-        
-    # Ensuring that the 'save_entry' function only processes valid entries
-    # Seperate window will pop up saying that the entry box is empty or invalid
-    else:
-        messagebox.showwarning("Warning", "'Name' can't be a special character!")
-        # Clear the entry box
-        entry_name.delete(0, tk.END)
-
-def check_entry_hired_item():
-    text=entry_hired_item.get()
-    if entry_hired_item.get() == "":
-        messagebox.showwarning("Warning", "'The Item that is hired' is empty")
-        entry_hired_item.delete(0, tk.END)
-        
-    elif entry_hired_item.get().isalpha():
-        display_label = Label(main_window, text=text)
-        entry_hired_item.delete(0, tk.END)
-        
-    elif entry_hired_item.get().isdigit():
-        messagebox.showwarning("Warning", "'The Item that is hired' cannot be a number")
-        entry_hired_item.delete(0, tk.END)
-        
-    else:
-        messagebox.showwarning("Warning", "'The Item that is hired' can't be a special character!")
-        # Clear the entry box
-        entry_hired_item.delete(0, tk.END)
-    entry_hired_item.delete(0, tk.END)
-
-def check_item_amount():
-    text=entry_item_amount.get()
-    if entry_item_amount.get() == "":
-        messagebox.showwarning("Warning", "'How many of the item' is empty")
-        entry_item_amount.delete(0, tk.END)
-        
-    elif entry_item_amount.get().isdigit():
-        display_label = Label(main_window, text=text)
-        entry_item_amount.delete(0, tk.END)
-        
-    elif entry_item_amount.get().isalpha():
-        messagebox.showwarning("Warning", "'How many of the item' cannot be an alphabetical number")
-        entry_item_amount.delete(0, tk.END)
-        
-    else:
-        messagebox.showwarning("Warning", "'How many of the item' can't be a special character!")
-        # Clear the entry box
-        entry_item_amount.delete(0, tk.END)
-
-# Check the inputs are all valid
-def check_inputs():
-    check_entry_name()
-    check_entry_hired_item()
-    check_item_amount()
-
-# Choosing a background colour
-bg_colour1 = "lightblue"
-bg_colour2 = "khaki"
-# Choosing a font
-font1=("Verdana", 8, "normal")    
-
 # Start the program running
 def main():
     # Declaring the global variables
     global main_window, entry_name, entry_hired_item, entry_item_amount, delete_item, store_details, counters
+    # Choosing a background colour
+    bg_colour1 = "lightblue"
+    bg_colour2 = "khaki"
+    # Choosing a font
+    font1=("Verdana", 8, "normal")
+    font_headings=("Verdana", 8, "bold")
     
     # Creating the main window
     main_window = tk.Tk()
@@ -157,15 +42,49 @@ def main():
     bottom_most_frame = tk.Frame(main_window, bg=bg_colour1)
     bottom_most_frame.grid(row=3, column=0, sticky="ew")
 
+    # Creating a function that can be used to exit to program
+    def exit_program():
+        main_window.destroy()
+
+    def save_entry_to_file(entry):   
+        with open("entries.txt","a") as file: # 'a' opens the file for appending
+            file.write(",".join(map(str,entry))+"\n")
+
+    # Add the next customer to the list
+    def append_name():
+        check_inputs()
+        if len(entry_name.get()) == 0 :
+            # Append each item to its own area of the list
+            check_inputs()
+        else:
+            # Generating a random receipt number
+            receipt_number=random.randint(100,999)
+            # Creating the entry as a list of values
+            entry=([entry_name.get(),entry_hired_item.get(),entry_item_amount.get(),receipt_number])
+            # Append the entry to the storedetails 
+            store_details.append(entry)
+            # Save the entry to the file
+            save_entry_to_file(entry)
+            # Clear the boxes
+            entry_name.delete(0,'end')
+            entry_hired_item.delete(0,'end')
+            entry_item_amount.delete(0,'end')
+            counters['total_entries'] += 1
+
+    def validate_alpha_input(char):
+        return char.isalpha()
+
+    def validate_digit_input(char):
+        return char.isdigit()
     # Print all the headings for when data is entered
     def print_store_details():
         name_count = 0
         # Create the column headings
-        Label(bottom_most_frame, font=font1, text="Row", bg=bg_colour1).grid(column=0,row=8,padx=2,pady=2)
-        Label(bottom_most_frame, font=font1, text="Name", bg=bg_colour1).grid(column=1,row=8,padx=2,pady=2)
-        Label(bottom_most_frame, font=font1, text="The Item that is hired", bg=bg_colour1).grid(column=2,row=8,padx=2,pady=2)
-        Label(bottom_most_frame, font=font1, text="How many of the item", bg=bg_colour1).grid(column=3,row=8,padx=2,pady=2)
-        Label(bottom_most_frame, font=font1, text="Receipt No.", bg=bg_colour1).grid(column=4, row=8,padx=2,pady=2)
+        Label(bottom_most_frame, font=font_headings, text="Row", bg=bg_colour1).grid(column=0,row=8,padx=2,pady=2)
+        Label(bottom_most_frame, font=font_headings, text="Name", bg=bg_colour1).grid(column=1,row=8,padx=2,pady=2)
+        Label(bottom_most_frame, font=font_headings, text="The Item that is hired", bg=bg_colour1).grid(column=2,row=8,padx=2,pady=2)
+        Label(bottom_most_frame, font=font_headings, text="How many of the item", bg=bg_colour1).grid(column=3,row=8,padx=2,pady=2)
+        Label(bottom_most_frame, font=font_headings, text="Receipt No.", bg=bg_colour1).grid(column=4, row=8,padx=2,pady=2)
 
         # Add each item in the list into its own row
         while name_count < counters['total_entries'] :
@@ -216,12 +135,56 @@ def main():
         tk.Button(popup, text="Delete", command=confirm_deletion,bg=bg_colour2).pack(side="left", padx=10, pady=10)
         tk.Button(popup, text="Cancel", command=popup.destroy, bg=bg_colour2).pack(side="right", padx=10, pady=10)
 
+    def check_entry_name():
+        name = entry_name.get()
+        if name == "":
+            messagebox.showwarning("Warning", "'Name' is empty")
+        elif name.isalpha():
+            name_length = len(name)
+            if name_length > 12:
+                messagebox.showwarning("Warning", "'Name' cannot be larger than 12 characters!")
+            else:
+                display_label = Label(bottom_most_frame, text=name)
+        elif name.isdigit():
+            print("Name is a number")
+            messagebox.showwarning("Warning", "'Name' cannot be a number!")
+        else:
+            print("Name has special characters")
+            messagebox.showwarning("Warning", "'Name' can't be a special character!")
+
+    def check_entry_hired_item():
+        text=entry_hired_item.get()
+        if entry_hired_item.get() == "":
+            messagebox.showwarning("Warning", "'The Item that is hired' is empty")  
+        elif entry_hired_item.get().isalpha():
+            display_label = Label(main_window, text=text)            
+        elif entry_hired_item.get().isdigit():
+            messagebox.showwarning("Warning", "'The Item that is hired' cannot be a number")
+        else:
+            messagebox.showwarning("Warning", "'The Item that is hired' can't be a special character!")
+
+    def check_item_amount():
+        text=entry_item_amount.get()
+        if entry_item_amount.get() == "":
+            messagebox.showwarning("Warning", "'How many of the item' is empty")
+        elif entry_item_amount.get().isdigit():
+            display_label = Label(main_window, text=text)
+        elif entry_item_amount.get().isalpha():
+            messagebox.showwarning("Warning", "'How many of the item' cannot be an alphabetical number")
+        else:
+            messagebox.showwarning("Warning", "'How many of the item' can't be a special character!")
+
+    # Check the inputs are all valid
+    def check_inputs():
+        check_entry_name()
+        check_entry_hired_item()
+        check_item_amount()
 
     # Loading the png image
     image=tk.PhotoImage(file="Julie's party hire logo.png")
     # Creating a label and setting the image as the content
     image_label = tk.Label(top_frame, image=image, bg=bg_colour1)
-    image_label.grid(column=1, row=0, padx=40, pady=10, sticky="nsew")
+    image_label.grid(column=1, row=0, padx=80, pady=10, sticky="nsew")
     image_label.image=image # Keeping a reference to avoid garbage collection (without this, image won't display)
 
     # Setting up the validation command
@@ -260,3 +223,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
