@@ -1,49 +1,60 @@
-# Import tkinter so we can make a GUI
-import tkinter as tk
-from tkinter import messagebox # Importing messagebox for error messages
-from tkinter import *
-from tkinter import ttk # Importing ttk for combobox function
-import random # Importing random for generating a random receipt number
-import os # For saving to a data file
+#Author: Divya Rana.
+#Date: 26/08/2024.
+#Purpose: To create an application.
 
-# Start the program running
+# Import tkinter so we can make a GUI.
+import tkinter as tk
+# Importing messagebox for error messages.
+from tkinter import messagebox 
+from tkinter import *
+# Importing ttk for combobox function.
+from tkinter import ttk
+# Importing random for generating a random receipt number.
+import random
+# For saving to a data file.
+import os 
+
+# Start the program running.
 def main():
-    # Creating a function that can be used to exit to program
+    # Creating a function that can be used to exit to program.
     def exit_program():
         main_window.destroy()
 
-    def save_entry_to_file(entry):   
-        with open("entries.txt","a") as file: # 'a' opens the file for appending
+    def save_entry_to_file(entry):
+        # 'a' opens the file for appending.
+        with open("entries.txt","a") as file: 
             file.write(",".join(map(str,entry))+"\n")
 
-    # Add the next customer to the list
+    # Add the next customer to the list.
     def append_name():
-        # Storing the results of the validation checks
+        # Storing the results of the validation checks.
         valid_name = check_entry_name()
         valid_item_hired = check_entry_hired_item()
         valid_item_amount = check_entry_item_amount()
 
-        # If all inputs were valid (all functions returned True), then data will be saved and appended so thats it's ready to be printed/displayed
+        # If all inputs were valid (all functions returned True), then data will be saved and appended so thats it's ready to be printed/displayed.
         if valid_name and valid_item_hired and valid_item_amount:
-            # Generating a random receipt number
+            # Generating a random receipt number.
             receipt_number=random.randint(100,999)
-            # Creating the entry as a list of values
+            # Creating the entry as a list of values.
             entry=[entry_name.get(),entry_hired_item.get(),entry_item_amount.get(),receipt_number]
-            # Append the entry to the storedetails 
+            # Append the entry to the storedetails .
             store_details.append(entry)
-            # Save the entry to the file
+            # Save the entry to the file.
             save_entry_to_file(entry)
 
-            # Clear the boxes
+            # Clear the boxes.
             entry_name.delete(0,'end')
-            entry_hired_item.set('') # Resetting the combobox
+            # Resetting the combobox.
+            entry_hired_item.set('') 
             entry_item_amount.delete(0,'end')
 
             counters['total_entries'] += 1
         else:
-            # Clear the boxes
+            # Clear the boxes.
             entry_name.delete(0,'end')
-            entry_hired_item.set('') # Resetting the combobox
+            # Resetting the combobox.
+            entry_hired_item.set('') 
             entry_item_amount.delete(0,'end')
             pass
 
@@ -53,30 +64,30 @@ def main():
     def validate_digit_input(char):
         return char.isdigit() or char ==""
     
-    # Function to create or update the display window
+    # Function to create or update the display window.
     def print_store_details():
         global displayed_data, counters
         name_count=0
-        #Check if the window already exists
+        # Check if the window already exists.
         if displayed_data is None or not displayed_data.winfo_exists():
-            # Creating a new window where the data can be displayed
+            # Creating a new window where the data can be displayed.
             displayed_data = tk.Toplevel(main_window)
             displayed_data.title("Hired items from Julie's Party Hire Store")
             displayed_data.configure(bg=bg_colour1)
             displayed_data.iconbitmap('pinkhat.ico')
         else:
-            # Clear the window if it already exists (so that the new information and old information is printed again and together)
+            # Clear the window if it already exists (so that the new information and old information is printed again and together).
             for widget in displayed_data.winfo_children():
                 widget.destroy()
                 
-        # Create the column headings (within the 'displayed_data' window)
+        # Create the column headings (within the 'displayed_data' window).
         Label(displayed_data, font=font_headings, text="Row", bg=bg_colour1).grid(column=0,row=0,padx=2,pady=2)
         Label(displayed_data, font=font_headings, text="Name", bg=bg_colour1).grid(column=1,row=0,padx=2,pady=2)
         Label(displayed_data, font=font_headings, text="The Item that is hired", bg=bg_colour1).grid(column=2,row=0,padx=2,pady=2)
         Label(displayed_data, font=font_headings, text="Item Amount", bg=bg_colour1).grid(column=3,row=0,padx=2,pady=2)
         Label(displayed_data, font=font_headings, text="Receipt No.", bg=bg_colour1).grid(column=4, row=0,padx=2,pady=2)
 
-        # Add each item in the list into its own row (within the 'displayed_data' window)
+        # Add each item in the list into its own row (within the 'displayed_data' window).
         for i, entry in enumerate(store_details):
             Label(displayed_data, font=font1, text=i, bg=bg_colour1).grid(column=0,row=i+1, padx=2, pady=2) 
             Label(displayed_data, font=font1, text=entry[0], bg=bg_colour1).grid(column=1,row=i+1,padx=2,pady=2)
@@ -84,55 +95,86 @@ def main():
             Label(displayed_data, font=font1, text=entry[2], bg=bg_colour1).grid(column=3,row=i+1,padx=2,pady=2)
             Label(displayed_data, font=font1, text=entry[3], bg=bg_colour1).grid(column=4,row=i+1,padx=2,pady=2)
             name_count +=1
-            # Updating the global counter
+            # Updating the global counter.
             counters['name_count'] = name_count
 
-    # Delete a row from the list
+    # Delete a row from the list.
     def delete_row():
+        row_to_delete=entry_delete_item.get()
+
+        # Checking if the input is empty.
+        if row_to_delete =="":
+            messagebox.showwarning("Warning", "Please do not leave this field blank")
+            return
         try:
-            row_to_delete=int(entry_delete_item.get())
-            if row_to_delete<0 or row_to_delete>= len(store_details):
-                messagebox.showwarning("Warning", "Invalid Row Number!")
+            # Convert the row number to an integer.
+            row_to_delete=int(row_to_delete)
+
+            # Check if the row number is within the valid range.
+            if row_to_delete> len(store_details):
+                messagebox.showwarning("Warning", "Invalid Row Number!\n\n Row number does not exist (Too high)")
                 entry_delete_item.delete(0,'end')
                 return
+                
+            # Delete the specified row from the store_details list.
             del store_details[row_to_delete]
+
+            # Updating the total number of entries.
             counters['total_entries'] -=1
-            for widget in bottom_most_frame.grid_slaves():
+
+            # Clearing and reprinting the store details.
+            for widget in displayed_data.grid_slaves():
                 if widget.grid_info()["row"]>7:
                      widget.grid_forget()
+
             print_store_details()
             entry_delete_item.delete(0,'end')
+
+        # Handling cases where the input is not a valid integer.
         except ValueError:
-            messagebox.showwarning("Warning", "Invalid Row Number! (No alphabetical letters or special characters)")
-            entry_delete_item.delete(0,'end')
+            if row_to_delete.isalpha():
+                messagebox.showwarning("Warning", "'Row Number' cannot be an alphabetical number")
+                entry_delete_item.delete(0,'end')
+            else:
+                messagebox.showwarning("Warning", "Invalid Row Number! \n\n(No special characters, only whole numbers)")
+                entry_delete_item.delete(0,'end')
 
     def delete_row_popup():
-        # Creating a new toplevel window/popup
+        # Creating a new toplevel window/popup.
         popup=tk.Toplevel(main_window)
         popup.title("Deleting a Row")
         popup.geometry("275x125")
         main_window.iconbitmap('pinkhat.ico')
         popup.configure(bg=bg_colour1)
 
-        tk.Label(popup, text="Which row would you like to delete?", bg=bg_colour1).pack(pady=10)
+        # Text which will guide user as to what to write in entry field.
+        tk.Label(popup, text="Which row would you like to delete?",font=font1, bg=bg_colour1).pack(pady=10)
         global entry_delete_item
+        # Creating entry field.
         entry_delete_item=tk.Entry(popup)
         entry_delete_item.pack(pady=5)
 
+        # Creating a function which will confirm the deletion of a row.
         def confirm_deletion():
-            delete_row() # Call the deletion function above
-            popup.destroy() # Close the popup
+            # Call the deletion function above.
+            delete_row()
+            # Close the popup.
+            popup.destroy()
 
-        tk.Button(popup, text="Delete", command=confirm_deletion,bg=bg_colour2).pack(side="left", padx=10, pady=10)
-        tk.Button(popup, text="Cancel", command=popup.destroy, bg=bg_colour2).pack(side="right", padx=10, pady=10)
+        # Creating the buttons
+        tk.Button(popup, text="Delete",font=font1, command=confirm_deletion,bg=bg_colour2).pack(side="left", padx=10, pady=10)
+        tk.Button(popup, text="Cancel",font=font1, command=popup.destroy, bg=bg_colour2).pack(side="right", padx=10, pady=10)
 
+    # Creating a function that will validate the name entry field.
     def check_entry_name():
         name = entry_name.get()
+        # If name is blank then corresponding error message will print.
         if name == "":
             messagebox.showwarning("Warning", "'Name' is empty")
             return False
-        elif name.isalpha():
+        else:
             name_length = len(name)
+            # If name is longer than 12 or exactly 1 character then corresponding error message will print.
             if name_length >12 or name_length==1:
                 message=("'Name' cannot be larger than 12 characters or exactly 1!"
                         f"\n\nYour entry consists of {name_length} character/s.\n")
@@ -143,24 +185,18 @@ def main():
                 messagebox.showwarning("Warning", message)
                 return False
             else:
-                display_label = Label(bottom_most_frame, text=name)
                 return True
-        elif name.isdigit():
-            print("Name is a number")
-            messagebox.showwarning("Warning", "'Name' cannot be a number!")
-            return False
-        else:
-            print("Name has special characters")
-            messagebox.showwarning("Warning", "'Name' can't be a special character!")
-            return False
-
+            
+    # Creating a function that will validate the hired_item entry field.
     def check_entry_hired_item():
         text=entry_hired_item.get()
+        # If hired_item is blank then corresponding error message will print.
         if entry_hired_item.get() == "":
             messagebox.showwarning("Warning", "'The Item that is hired' is empty")  
             return False
         elif entry_hired_item.get().isalpha():
             hired_item_length = len(text)
+            # If hired_item is longer than 12 or exactly 1 character then corresponding error message will print.
             if hired_item_length >12 or hired_item_length==1:
                 message=("'Item that is Hired' cannot be larger than 12 characters or exactly 1!"
                         f"\n\nYour entry consists of {hired_item_length} character/s.\n")
@@ -171,68 +207,67 @@ def main():
                 messagebox.showwarning("Warning", message)
                 return False
             else:
-                display_label = Label(bottom_most_frame, text=text)
                 return True
+        # If hired_item is numeric then corresponding error message will print.
         elif entry_hired_item.get().isdigit():
             messagebox.showwarning("Warning", "'The Item that is hired' cannot be a number")
             return False
+        # If hired_item is a special character then corresponding error message will print.
         else:
             messagebox.showwarning("Warning", "'The Item that is hired' can't be a special character!")
             return False
-            
+
+    # Creating a function that will validate the item_amount entry field.
     def check_entry_item_amount():
-        num=int(entry_item_amount.get())
+        # If item_amount is blank then corresponding error message will print.
         if entry_item_amount.get() == "":
             messagebox.showwarning("Warning", "'Item Amount' is empty")
             return False
-        elif entry_item_amount.get().isdigit():
+        else:
+            num=int(entry_item_amount.get())
+            # If item_amount is higher than 500 then corresponding error message will print.
             if num >500:
                 messagebox.showwarning("Warning", "'Item Amount' cannot be a value greater than 500.\n\n Please choose a lower number.")
                 return False
+            #If item_amount is exactly 0 then corresponding error message will print.
             elif num==0:
                 messagebox.showwarning("Warning", "'Item Amount' cannot be exactly 0 as this is invalid.\n\n Please choose a higher number.")
                 return False
             else:
-                display_label = Label(bottom_most_frame, text=num)
                 return True
-        elif entry_item_amount.get().isalpha():
-            messagebox.showwarning("Warning", "'Item Amount' cannot be an alphabetical number")
-            return False
-        else:
-            messagebox.showwarning("Warning", "'Item Amount' can't be a special character!")
-            return False
 
-    # Check the inputs are all valid
+    # Check the inputs are all valid.
     def check_inputs():
         check_entry_name()
         check_entry_hired_item()
         check_entry_item_amount()
 
-    # Declaring the global variables
+    # Declaring the global variables.
     global displayed_data, main_window, entry_name, entry_hired_item, entry_item_amount, delete_item, store_details, counters
 
-    # Choosing a background colour
+    # Choosing a background colour.
     bg_colour1 = "lightblue"
     bg_colour2 = "khaki"
-    # Choosing a font
-    font1=("Verdana", 8, "normal")
-    font_headings=("Verdana", 8, "bold")
-    # Global variable to store the display window (that'll display entered data/store details)
+    # Choosing a font.
+    font1=("Verdana", 10, "normal")
+    font_headings=("Verdana", 10, "bold")
+    # Global variable to store the display window (that'll display entered data/store details).
     displayed_data = None
     
-    # Creating the main window
+    # Creating the main window.
     main_window = tk.Tk()
-    # Changing background colour
+    # Changing background colour.
     main_window.configure(bg=bg_colour1)
-    # Personalising the window name
+    # Personalising the window name.
     main_window.title("Julie's Party Hire Store")
-    # Personalising the icon of the main window
+    # Personalising the icon of the main window.
     main_window.iconbitmap('pinkhat.ico')
 
-    # Create empty list for store details and empty variable for entries in the list
+    # Create empty list for store details and empty variable for entries in the list.
     counters = {'total_entries':0,'name_count':0}
-    store_details = []  # Creating frames for organisation
+    store_details = []  
 
+    # Creating frames for organisation.
     top_frame = tk.Frame(main_window, bg=bg_colour1)
     top_frame.grid(row=0, column=0, sticky="ew")
 
@@ -242,47 +277,46 @@ def main():
     bottom_frame = tk.Frame(main_window, bg=bg_colour1)
     bottom_frame.grid(row=2, column=0, sticky="ew")
 
-    bottom_most_frame = tk.Frame(main_window, bg=bg_colour1)
-    bottom_most_frame.grid(row=3, column=0, sticky="ew")
-
-    # Loading the png image
+    # Loading the png image.
     image=tk.PhotoImage(file="Julie's party hire logo.png")
-    # Creating a label and setting the image as the content
+    # Creating a label and setting the image as the content.
     image_label = tk.Label(top_frame, image=image, bg=bg_colour1)
     image_label.grid(column=1, row=0, padx=80, pady=10, sticky="nsew")
-    image_label.image=image # Keeping a reference to avoid garbage collection (without this, image won't display)
+    # Keeping a reference to avoid garbage collection (without this, image won't display).
+    image_label.image=image 
 
-    # Setting up the validation command
-    # Configuring the entry widget to use the validation function
+    # Setting up the validation command.
+    # Configuring the entry widget to use the validation function.
     validate_alpha = main_window.register(validate_alpha_input)
     validate_digit = main_window.register(validate_digit_input)
     
-    # Adding labels and entries to middle frame
+    # Adding labels and entries to middle frame.
     tk.Label(middle_frame, font=font1, text="Name", bg=bg_colour1).grid(row=0, column=0, sticky="e", padx=5, pady=5)
     tk.Label(middle_frame, font=font1, text="The Item that is hired", bg=bg_colour1).grid(row=1, column=0, sticky="e", padx=5, pady=5)
     tk.Label(middle_frame, font=font1, text="Item Amount", bg=bg_colour1).grid(row=2, column=0, sticky="e", padx=5, pady=5)
 
     entry_name = tk.Entry(middle_frame, validate="key", validatecommand=(validate_alpha,'%S'))
     entry_name.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
-    # Deciding on items for the combobox
+
+    # Deciding on items for the combobox.
     items_hired=['Chairs','Tables','Tablecloth','Centerpieces','Lights','Balloons','Flowers','Speakers','Plates','Bowls','Glassware','Beverages']
     entry_hired_item = ttk.Combobox(middle_frame, values=items_hired, validate="key", validatecommand=(validate_alpha,'%S'))
     entry_hired_item.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
     entry_item_amount = tk.Entry(middle_frame,validate="key", validatecommand=(validate_digit,'%S'))
     entry_item_amount.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
 
-    # Adding buttons to bottom frame
-    tk.Button(bottom_frame, font=font1, command=append_name,text="Check and Save Details", bg=bg_colour2).grid(row=3, column=1, padx=4, pady=4)
-    tk.Button(bottom_frame, font=font1, text="Display Details",command=print_store_details, bg=bg_colour2).grid(row=3, column=2, padx=4, pady=4)
-    tk.Button(bottom_frame, font=font1, text="Delete Row",command=delete_row_popup, bg=bg_colour2).grid(row=3, column=3, padx=4, pady=4)
-    tk.Button(bottom_frame, font=font1, text="Quit",command=exit_program, bg=bg_colour2).grid(row=3, column=4, padx=4, pady=4)
-    
-    # Configure grid weight to allow resizing
+    # Adding buttons to bottom frame.
+    tk.Button(bottom_frame, font=font1, command=append_name,text="Check and Save Details", bg=bg_colour2).grid(row=3, column=1, padx=4, pady=4, sticky="ew")
+    tk.Button(bottom_frame, font=font1, text="Display Details",command=print_store_details, bg=bg_colour2).grid(row=3, column=2, padx=4, pady=4, sticky="ew")
+    tk.Button(bottom_frame, font=font1, text="Delete Row",command=delete_row_popup, bg=bg_colour2).grid(row=4, column=1, padx=4, pady=4, sticky="ew")
+    tk.Button(bottom_frame, font=font1, text="Quit",command=exit_program, bg=bg_colour2).grid(row=4, column=2, padx=4, pady=4, sticky="ew")
+
+    # Configure grid weight to allow resizing.
     top_frame.grid_columnconfigure(0, weight=1)
     middle_frame.grid_columnconfigure(1, weight=1)
     bottom_frame.grid_columnconfigure([0, 1, 2, 3], weight=1)
     
-    # Start the GUI up
+    # Start the GUI up.
     main_window.mainloop()
 
 if __name__ == "__main__":
